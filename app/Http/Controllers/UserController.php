@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -11,6 +12,51 @@ class UserController extends Controller
     {
         return view('users.create');
     }
+
+    // ログイン画面を表示
+    public function login()
+    {
+        return view('users.login');
+    }
+
+    // ログイン情報を送信
+    public function authenticate(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ], [
+            'email.required' => 'メールアドレスを入力してください。',
+            'email.email' => '有効なメールアドレスを入力してください。',
+            'password.required' => 'パスワードを入力してください。',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect('/products');
+        }
+
+        return back()->withErrors([
+            'login' => 'メールアドレスまたはパスワードが正しくありません。',
+        ])->onlyInput('email');
+    }
+
+
+    // ログアウト
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
+
 
     public function store(Request $request)
     {
