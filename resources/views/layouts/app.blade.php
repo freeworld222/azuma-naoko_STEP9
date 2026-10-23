@@ -49,8 +49,11 @@
       <nav>
         <a href="/">Home</a>
         <a href="#">マイページ</a>
-        <span>ログインユーザー: TTUU</span>
-        <a href="#">ログアウト</a>
+        <span>ログインユーザー: {{ auth()->user()->name }}</span>
+        <form action="/logout" method="POST">
+          @csrf
+          <button type="submit">ログアウト</button>
+        </form>
       </nav>
     </div>
   </header>
@@ -60,9 +63,24 @@
     @yield('content')
   </main>
 
+
   <footer>
-    <!-- フッター -->
+    <div style="text-align: center; padding: 24px;">
+      <p>
+        <button type="button">お問い合わせ</button>
+      </p>
+
+      <p>
+        <a href="/">Home</a>
+        <a href="#">マイページ</a>
+      </p>
+
+      <hr>
+
+      <small>© 2024 Company, Inc</small>
+    </div>
   </footer>
+
 
 </body>
 
