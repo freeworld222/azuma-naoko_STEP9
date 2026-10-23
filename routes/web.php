@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LikeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,3 +28,10 @@ Route::post('/login', [UserController::class, 'authenticate']);
 
 // ログアウト
 Route::post('/logout', [UserController::class, 'logout']);
+
+// 商品詳細画面を表示
+Route::get('/products/{id}', [ProductController::class, 'show'])->middleware('auth');
+
+// お気に入りの登録・解除
+Route::post('/products/{productId}/like', [LikeController::class, 'toggle'])
+    ->middleware('auth');

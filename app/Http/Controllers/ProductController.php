@@ -7,10 +7,28 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+
     // 商品一覧を表示
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::where('user_id', '!=', auth()->id())
+        $query = Product::where('user_id', '!=', auth()->id());
+
+        // 商品名が入力されている場合、商品名で絞り込む
+        if ($request->filled('product_name')) {
+            $query->where('product_name', 'like', '%' . $request->product_name . '%');
+        }
+
+        // 最低価格が入力されている場合
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        // 最高価格が入力されている場合
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        $products = $query
             ->orderBy('id', 'asc')
             ->get();
 
@@ -36,9 +54,19 @@ class ProductController extends Controller
         $user = auth()->user();
         $validatedData['user_id'] = $user->id;
         $validatedData['company_id'] = $user->company_id;
-
         Product::create($validatedData);
-
         return redirect('/products');
+    }
+
+    // 商品詳細画面を表示
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+
+        $isLiked = $product->likes()
+            ->where('user_id', auth()->id())
+            ->exists();
+
+        return view('products.show', compact('product', 'isLiked'));
     }
 }
