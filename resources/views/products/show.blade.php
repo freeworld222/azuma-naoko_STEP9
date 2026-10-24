@@ -18,6 +18,10 @@
   </button>
 </form>
 
+<form action="/products/{{ $product->id }}/purchase" method="GET">
+  <button type="submit">カートに追加する</button>
+</form>
+
 <a href="/products">戻る</a>
 
 @endsection

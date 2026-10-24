@@ -35,3 +35,9 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->middleware('au
 // お気に入りの登録・解除
 Route::post('/products/{productId}/like', [LikeController::class, 'toggle'])
     ->middleware('auth');
+
+// 購入確認画面を表示
+Route::get('/products/{id}/purchase', [ProductController::class, 'purchase'])->middleware('auth');
+
+// 購入処理
+Route::post('/products/{id}/purchase', [ProductController::class, 'storePurchase'])->middleware('auth');

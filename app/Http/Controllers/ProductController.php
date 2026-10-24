@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Sale;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-
     // 商品一覧を表示
     public function index(Request $request)
     {
@@ -54,7 +55,9 @@ class ProductController extends Controller
         $user = auth()->user();
         $validatedData['user_id'] = $user->id;
         $validatedData['company_id'] = $user->company_id;
+
         Product::create($validatedData);
+
         return redirect('/products');
     }
 
@@ -68,5 +71,46 @@ class ProductController extends Controller
             ->exists();
 
         return view('products.show', compact('product', 'isLiked'));
+    }
+
+    // 購入確認画面を表示
+    public function purchase($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return view('products.purchase', compact('product'));
+    }
+
+    // 購入処理
+    public function storePurchase(Request $request, $id)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+            $product = Product::where('id', $id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $quantity = (int) $request->quantity;
+
+            if ($quantity > $product->stock) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'quantity' => '在庫数を超える購入はできません。',
+                ]);
+            }
+
+            Sale::create([
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+            ]);
+
+            $product->decrement('stock', $quantity);
+        });
+
+        return redirect('/products/' . $id . '/purchase')
+            ->with('success', '購入が完了しました。');
     }
 }
