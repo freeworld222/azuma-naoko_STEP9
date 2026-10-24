@@ -4,6 +4,18 @@
 
 <h1>商品一覧</h1>
 
+@if (session('success'))
+<div id="purchase-modal"
+  style="position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <p>{{ session('success') }}</p>
+    <button type="button" onclick="document.getElementById('purchase-modal').remove()">
+      閉じる
+    </button>
+  </div>
+</div>
+@endif
+
 <form action="/products" method="GET">
   <div>
     <label>商品名</label>

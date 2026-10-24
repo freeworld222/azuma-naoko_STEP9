@@ -110,7 +110,7 @@ class ProductController extends Controller
             $product->decrement('stock', $quantity);
         });
 
-        return redirect('/products/' . $id . '/purchase')
+        return redirect('/products')
             ->with('success', '購入が完了しました。');
     }
 }

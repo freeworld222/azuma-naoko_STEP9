@@ -12,19 +12,6 @@
 <p>金額：￥{{ $product->price }}</p>
 <p>会社：{{ $product->company->company_name ?? '会社情報なし' }}</p>
 
-@if (session('success'))
-<div id="purchase-modal"
-  style="position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-
-  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-    <p>{{ session('success') }}</p>
-    <button type="button" onclick="document.getElementById('purchase-modal').remove()">
-      閉じる
-    </button>
-  </div>
-
-</div>
-@endif
 
 <form action="/products/{{ $product->id }}/purchase" method="POST">
   @csrf
