@@ -1,4 +1,4 @@
-<form action="/products" method="POST">
+<form action="/products" method="POST" enctype="multipart/form-data">
   @csrf
   <div>
     <label>商品名</label>
