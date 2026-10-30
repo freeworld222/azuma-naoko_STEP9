@@ -79,6 +79,69 @@ class ProductController extends Controller
         return view('products.show', compact('product', 'isLiked'));
     }
 
+    // 出品商品詳細画面を表示
+    public function myShow($id)
+    {
+        $product = Product::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        return view('products.my-show', compact('product'));
+    }
+
+    // 出品商品編集画面を表示
+    public function editMyProduct($id)
+    {
+        $product = Product::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        return view('products.my-edit', compact('product'));
+    }
+
+    // 出品商品を更新
+    public function updateMyProduct(Request $request, $id)
+
+    {
+        $request->validate([
+            'product_name' => 'required',
+            'price' => 'required|integer|min:0',
+            'description' => 'required',
+            'stock' => 'required|integer|min:0',
+            'img_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+        $product = Product::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $product->product_name = $request->product_name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->stock = $request->stock;
+
+        if ($request->hasFile('img_path')) {
+            $product->img_path = $request->file('img_path')
+                ->store('products', 'public');
+        }
+
+        $product->save();
+
+        return redirect('/my-products/' . $product->id);
+    }
+
+    // 出品商品を削除
+    public function destroyMyProduct($id)
+    {
+        $product = Product::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $product->delete();
+
+        return redirect('/products');
+    }
+
+
     // 購入確認画面を表示
     public function purchase($id)
     {
