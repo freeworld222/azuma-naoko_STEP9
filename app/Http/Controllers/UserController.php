@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserRegisterRequest;
 
 class UserController extends Controller
 {
@@ -20,17 +23,8 @@ class UserController extends Controller
     }
 
     // ログイン情報を送信
-    public function authenticate(Request $request)
+    public function authenticate(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ], [
-            'email.required' => 'メールアドレスを入力してください。',
-            'email.email' => '有効なメールアドレスを入力してください。',
-            'password.required' => 'パスワードを入力してください。',
-        ]);
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -58,15 +52,9 @@ class UserController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(UserRegisterRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'name_kanji' => 'required',
-            'name_kana' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-        ]);
+        $validatedData = $request->validated();
 
         User::create($validatedData);
 
@@ -82,20 +70,16 @@ class UserController extends Controller
     }
 
     // アカウント情報を更新
-    public function update(Request $request)
+    public function update(UserUpdateRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
-            'name_kanji' => 'required|string|max:255',
-            'name_kana' => 'required|string|max:255',
-        ]);
+        $validatedData = $request->validated();
 
         $user = Auth::user();
         $user->update($validatedData);
 
         return redirect('/mypage')->with('success', 'アカウント情報を更新しました。');
     }
+
 
     // マイページを表示
     public function myPage()

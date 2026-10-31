@@ -1,5 +1,13 @@
 <h1>アカウント情報編集</h1>
 
+@if ($errors->any())
+<ul>
+  @foreach ($errors->all() as $error)
+  <li>{{ $error }}</li>
+  @endforeach
+</ul>
+@endif
+
 <form action="/mypage/edit" method="POST">
   @csrf
   @method('PUT')

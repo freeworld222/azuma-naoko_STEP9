@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ProductRequest;
+use App\Http\Requests\PurchaseRequest;
 
 class ProductController extends Controller
 {
@@ -43,15 +45,9 @@ class ProductController extends Controller
     }
 
     // 商品登録データを受け取る
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $validatedData = $request->validate([
-            'product_name' => 'required',
-            'price' => 'required|integer|min:0',
-            'description' => 'required',
-            'stock' => 'required|integer|min:0',
-            'img_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
+        $validatedData = $request->validated();
 
         if ($request->hasFile('img_path')) {
             $validatedData['img_path'] = $request->file('img_path')
@@ -100,24 +96,19 @@ class ProductController extends Controller
     }
 
     // 出品商品を更新
-    public function updateMyProduct(Request $request, $id)
-
+    public function updateMyProduct(ProductRequest $request, $id)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'price' => 'required|integer|min:0',
-            'description' => 'required',
-            'stock' => 'required|integer|min:0',
-            'img_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
+        $validatedData = $request->validated();
+
+        // 更新対象の商品を取得する
         $product = Product::where('id', $id)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        $product->product_name = $request->product_name;
-        $product->price = $request->price;
-        $product->description = $request->description;
-        $product->stock = $request->stock;
+        $product->product_name = $validatedData['product_name'];
+        $product->price = $validatedData['price'];
+        $product->description = $validatedData['description'];
+        $product->stock = $validatedData['stock'];
 
         if ($request->hasFile('img_path')) {
             $product->img_path = $request->file('img_path')
@@ -151,18 +142,18 @@ class ProductController extends Controller
     }
 
     // 購入処理
-    public function storePurchase(Request $request, $id)
+    public function storePurchase(PurchaseRequest $request, $id)
     {
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
 
-        DB::transaction(function () use ($request, $id) {
+        // バリデーション済みの購入数を取得する
+        $validatedData = $request->validated();
+        $quantity = (int) $validatedData['quantity'];
+
+        // 在庫をロックして購入対象の商品を取得する
+        DB::transaction(function () use ($quantity, $id) {
             $product = Product::where('id', $id)
                 ->lockForUpdate()
                 ->firstOrFail();
-
-            $quantity = (int) $request->quantity;
 
             if ($quantity > $product->stock) {
                 throw \Illuminate\Validation\ValidationException::withMessages([

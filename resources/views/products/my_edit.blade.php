@@ -4,6 +4,14 @@
 
 <h1>出品商品編集</h1>
 
+@if ($errors->any())
+<ul>
+  @foreach ($errors->all() as $error)
+  <li>{{ $error }}</li>
+  @endforeach
+</ul>
+@endif
+
 <form action="/my-products/{{ $product->id }}" method="POST" enctype="multipart/form-data">
   @csrf
   @method('PUT')

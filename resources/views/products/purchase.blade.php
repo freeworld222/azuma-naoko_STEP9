@@ -2,9 +2,15 @@
 
 @section('content')
 
-<h1>購入確認画面</h1>
+<h1>購入画面</h1>
 
-<h2>商品情報</h2>
+@if ($errors->any())
+<ul>
+  @foreach ($errors->all() as $error)
+  <li>{{ $error }}</li>
+  @endforeach
+</ul>
+@endif
 
 <p>商品名：{{ $product->product_name }}</p>
 <p>商品説明：{{ $product->description }}</p>
@@ -23,7 +29,7 @@
       id="quantity"
       name="quantity"
       min="1"
-      max="{{ $product->stock }}" 
+      max="{{ $product->stock }}"
       value="{{ old('quantity', 1) }}"
       required>
   </div>

@@ -4,6 +4,14 @@
 
 <h1>お問い合わせ</h1>
 
+@if ($errors->any())
+<ul>
+  @foreach ($errors->all() as $error)
+  <li>{{ $error }}</li>
+  @endforeach
+</ul>
+@endif
+
 <form action="/contact" method="POST">
   @csrf
   <div>

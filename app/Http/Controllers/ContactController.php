@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Mail\ContactReceived;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\ContactRequest;
 
 class ContactController extends Controller
 {
-    public function store(Request $request)
+    public function store(ContactRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'message' => 'required|string',
-        ]);
+        // ContactRequestで検証済みの入力データを取得する
+        $validated = $request->validated();
 
         $contact = Contact::create([
             'user_id' => auth()->id(),
@@ -25,7 +22,7 @@ class ContactController extends Controller
         ]);
 
         // お問い合わせ内容をデータベースに保存したあと、入力されたメールアドレス宛てにメールを送信する処理
-        Mail::to($contact->email)->send(new ContactReceived($contact));
+        // Mail::to($contact->email)->send(new ContactReceived($contact));
 
         return redirect('/products')->with('success', 'お問い合わせを送信しました。');
     }

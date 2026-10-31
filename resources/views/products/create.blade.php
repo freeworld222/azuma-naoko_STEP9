@@ -1,3 +1,13 @@
+<h1>商品登録</h1>
+
+@if ($errors->any())
+<ul>
+  @foreach ($errors->all() as $error)
+  <li>{{ $error }}</li>
+  @endforeach
+</ul>
+@endif
+
 <form action="/products" method="POST" enctype="multipart/form-data">
   @csrf
   <div>
