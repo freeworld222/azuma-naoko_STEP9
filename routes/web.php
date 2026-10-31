@@ -32,6 +32,17 @@ Route::post('/login', [UserController::class, 'authenticate']);
 Route::post('/logout', [UserController::class, 'logout']);
 
 
+// マイページを表示
+Route::get('/mypage', [UserController::class, 'myPage'])->middleware('auth');
+
+// アカウント編集画面を表示
+Route::get('/mypage/edit', [UserController::class, 'edit'])->middleware('auth');
+
+// アカウント情報を更新
+Route::put('/mypage/edit', [UserController::class, 'update'])->middleware('auth');
+
+
+
 // 商品詳細画面を表示
 Route::get('/products/{id}', [ProductController::class, 'show'])->middleware('auth');
 
