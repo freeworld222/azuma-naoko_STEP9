@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LikeController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -63,3 +65,7 @@ Route::post('/products/{id}/purchase', [ProductController::class, 'storePurchase
 Route::get('/contact', function () {
     return view('contact');
 })->middleware('auth');
+
+// お問い合わせ内容を受け取る
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware('auth');

@@ -86,7 +86,7 @@ class ProductController extends Controller
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        return view('products.my-show', compact('product'));
+        return view('products.my_show', compact('product'));
     }
 
     // 出品商品編集画面を表示
@@ -96,7 +96,7 @@ class ProductController extends Controller
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        return view('products.my-edit', compact('product'));
+        return view('products.my_edit', compact('product'));
     }
 
     // 出品商品を更新

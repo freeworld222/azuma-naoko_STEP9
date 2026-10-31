@@ -23,7 +23,7 @@
       id="quantity"
       name="quantity"
       min="1"
-      max="{{ $product->stock }}"
+      max="{{ $product->stock }}" 
       value="{{ old('quantity', 1) }}"
       required>
   </div>
