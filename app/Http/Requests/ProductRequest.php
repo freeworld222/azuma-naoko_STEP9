@@ -16,7 +16,7 @@ class ProductRequest extends FormRequest
     }
 
     /**
-    　　このリクエストに適用するバリデーションルールを取得する
+    　　* このリクエストに適用するバリデーションルールを取得する
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array

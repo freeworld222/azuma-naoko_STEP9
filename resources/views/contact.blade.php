@@ -2,36 +2,43 @@
 
 @section('content')
 
-<h1>お問い合わせ</h1>
+<div class="contact-container">
 
-@if ($errors->any())
-<ul>
-  @foreach ($errors->all() as $error)
-  <li>{{ $error }}</li>
-  @endforeach
-</ul>
-@endif
+  <h1>お問い合わせフォーム</h1>
 
-<form action="/contact" method="POST">
-  @csrf
-  <div>
-    <label>名前</label>
-    <input type="text" name="name">
-  </div>
+  @if ($errors->any())
+  <ul class="contact-errors">
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
+  </ul>
+  @endif
 
-  <div>
-    <label>メールアドレス</label>
-    <input type="email" name="email">
-  </div>
+  <form action="/contact" method="POST" class="contact-form">
+    @csrf
 
-  <div>
-    <label>お問い合わせ内容</label>
-    <textarea name="message"></textarea>
-  </div>
+    <div class="contact-form-group">
+      <label for="name">名前</label>
+      <input type="text" id="name" name="name" value="{{ old('name') }}">
+    </div>
 
-  <button type="submit">送信</button>
-</form>
+    <div class="contact-form-group">
+      <label for="email">メールアドレス</label>
+      <input type="email" id="email" name="email" value="{{ old('email') }}">
+    </div>
 
-<a href="/products">戻る</a>
+    <div class="contact-form-group">
+      <label for="message">お問い合わせ内容</label>
+      <textarea id="message" name="message">{{ old('message') }}</textarea>
+    </div>
+
+    <div class="contact-form-actions">
+      <button type="submit" class="cart-button">送信</button>
+      <a href="/products" class="back-button">戻る</a>
+    </div>
+
+  </form>
+
+</div>
 
 @endsection

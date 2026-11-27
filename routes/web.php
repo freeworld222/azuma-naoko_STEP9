@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PasswordResetController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +28,22 @@ Route::post('/register', [UserController::class, 'store']);
 // ログイン
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'authenticate']);
+
+// パスワードリセット
+Route::get('/password/reset', [PasswordResetController::class, 'showRequestForm'])
+    ->name('password.request');
+
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLink'])
+    ->name('password.email');
+
+
+Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])
+    ->name('password.update');
+
+
 
 // ログアウト
 Route::post('/logout', [UserController::class, 'logout']);

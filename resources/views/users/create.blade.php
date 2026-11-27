@@ -1,44 +1,53 @@
-<h1>新規ユーザー登録</h1>
+@extends('layouts.app')
 
-@if ($errors->any())
-<ul>
-  @foreach ($errors->all() as $error)
-  <li>{{ $error }}</li>
-  @endforeach
-</ul>
-@endif
+@section('content')
+<div class="register-container">
+  <div class="register-card">
+    <h1>Register</h1>
 
-<form action="/register" method="POST">
-  @csrf
-  <div>
-    <label>ユーザー名</label>
-    <input type="text" name="name">
+    @if ($errors->any())
+    <ul class="register-errors">
+      @foreach ($errors->all() as $error)
+      <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+    @endif
+
+    <form action="/register" method="POST">
+      @csrf
+
+      <div class="register-form-group">
+        <label>Name（ユーザー名）</label>
+        <input type="text" name="name" value="{{ old('name') }}">
+      </div>
+
+      <div class="register-form-group">
+        <label>名前（漢字）</label>
+        <input type="text" name="name_kanji" value="{{ old('name_kanji') }}">
+      </div>
+
+      <div class="register-form-group">
+        <label>名前（カナ）</label>
+        <input type="text" name="name_kana" value="{{ old('name_kana') }}">
+      </div>
+
+      <div class="register-form-group">
+        <label>Email Adress</label>
+        <input type="email" name="email" value="{{ old('email') }}">
+      </div>
+
+      <div class="register-form-group">
+        <label>Password</label>
+        <input type="password" name="password">
+      </div>
+
+      <div class="register-form-group">
+        <label>Comfirm Password</label>
+        <input type="password" name="password_confirmation">
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
   </div>
-
-  <div>
-    <label>名前（漢字）</label>
-    <input type="text" name="name_kanji">
-  </div>
-
-  <div>
-    <label>名前（カナ）</label>
-    <input type="text" name="name_kana">
-  </div>
-
-  <div>
-    <label>メールアドレス</label>
-    <input type="email" name="email">
-  </div>
-
-  <div>
-    <label>パスワード</label>
-    <input type="password" name="password">
-  </div>
-
-  <div>
-    <label>パスワード（確認用）</label>
-    <input type="password" name="password_confirmation">
-  </div>
-
-  <button type="submit">登録</button>
-</form>
+</div>
+@endsection

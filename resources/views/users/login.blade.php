@@ -1,30 +1,53 @@
-<h1>ログイン</h1>
+@extends('layouts.app')
 
-<!-- エラーの際の表示 -->
-@if ($errors->any())
-<ul>
-  @foreach ($errors->all() as $error)
-  <li>{{ $error }}</li>
-  @endforeach
-</ul>
-@endif
+@section('content')
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-card-header">ログイン</div>
 
-<form action="/login" method="POST">
-  @csrf
+    <div class="login-card-body">
+      @if ($errors->any())
+      <ul class="error-list">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+      @endif
 
-  <div>
-    <label>メールアドレス</label>
-    <input type="email" name="email" value="{{ old('email') }}">
+      <form action="/login" method="POST">
+        @csrf
+
+        <div class="form-group">
+          <label for="email">メールアドレス</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ old('email') }}">
+        </div>
+
+        <div class="form-group">
+          <label for="password">パスワード</label>
+          <input
+            type="password"
+            id="password"
+            name="password">
+        </div>
+
+        <div class="remember-me">
+          <label>
+            <input type="checkbox" name="remember" value="1">
+            このアカウントを記憶する
+          </label>
+        </div>
+
+        <button type="submit">ログイン</button>
+      </form>
+
+      <p>
+        <a href="{{ route('password.request') }}">パスワードをお忘れですか？</a>
+      </p>
+    </div>
   </div>
-
-  <div>
-    <label>パスワード</label>
-    <input type="password" name="password">
-  </div>
-
-  <button type="submit">ログイン</button>
-</form>
-
-<p>
-  <a href="/register">新規ユーザー登録はこちら</a>
-</p>
+</div>
+@endsection

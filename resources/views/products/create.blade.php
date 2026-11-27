@@ -1,39 +1,71 @@
-<h1>商品登録</h1>
+@extends('layouts.app')
 
-@if ($errors->any())
-<ul>
-  @foreach ($errors->all() as $error)
-  <li>{{ $error }}</li>
-  @endforeach
-</ul>
-@endif
+@section('content')
 
-<form action="/products" method="POST" enctype="multipart/form-data">
-  @csrf
-  <div>
-    <label>商品名</label>
-    <input type="text" name="product_name">
-  </div>
+<div class="product-create-container">
 
-  <div>
-    <label>価格</label>
-    <input type="number" name="price">
-  </div>
+  <h1>商品登録</h1>
 
-  <div>
-    <label>商品説明</label>
-    <textarea name="description"></textarea>
-  </div>
+  @if ($errors->any())
+  <ul class="error-messages">
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
+  </ul>
+  @endif
 
-  <div>
-    <label>在庫数</label>
-    <input type="number" name="stock">
-  </div>
+  <form action="/products" method="POST" enctype="multipart/form-data" class="product-create-form">
+    @csrf
 
-  <div>
-    <label>商品画像</label>
-    <input type="file" name="img_path">
-  </div>
+    <div class="product-create-group">
+      <label for="product_name">商品名</label>
+      <input
+        type="text"
+        id="product_name"
+        name="product_name"
+        value="{{ old('product_name') }}">
+    </div>
 
-  <button type="submit">登録</button>
-</form>
+    <div class="product-create-group">
+      <label for="price">価格</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        value="{{ old('price') }}">
+    </div>
+
+    <div class="product-create-group">
+      <label for="description">商品説明</label>
+      <textarea
+        id="description"
+        name="description">{{ old('description') }}</textarea>
+    </div>
+
+    <div class="product-create-group">
+      <label for="stock">在庫数</label>
+      <input
+        type="number"
+        id="stock"
+        name="stock"
+        value="{{ old('stock') }}">
+    </div>
+
+    <div class="product-create-group">
+      <label for="img_path">商品画像</label>
+      <input
+        type="file"
+        id="img_path"
+        name="img_path">
+    </div>
+
+    <div class="product-create-actions">
+      <a href="/products" class="back-button">戻る</a>
+      <button type="submit" class="cart-button">登録</button>
+    </div>
+
+  </form>
+
+</div>
+
+@endsection

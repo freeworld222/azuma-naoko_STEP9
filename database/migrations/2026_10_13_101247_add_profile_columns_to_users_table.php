@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('name_kanji');
             $table->string('name_kana')->nullable();
-            $table->foreignId('company_id')->nullable()->constrained('companies');
+            $table->foreignId('')->nullable()->constrained('companies');
         });
     }
 
@@ -24,8 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['company_id']);
-            $table->dropColumn(['name_kanji', 'name_kana', 'company_id']);
+            $table->dropForeign(['']);
+            $table->dropColumn(['name_kanji', 'name_kana', '']);
         });
     }
 };

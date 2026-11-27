@@ -1,29 +1,54 @@
-<h1>アカウント情報編集</h1>
+@extends('layouts.app')
 
-@if ($errors->any())
-<ul>
-  @foreach ($errors->all() as $error)
-  <li>{{ $error }}</li>
-  @endforeach
-</ul>
-@endif
+@section('content')
 
-<form action="/mypage/edit" method="POST">
-  @csrf
-  @method('PUT')
+<div class="account-edit-container">
 
-  <label>ユーザ名</label>
-  <input type="text" name="name" value="{{ $user->name }}">
+  <h1>アカウント情報編集</h1>
 
-  <label>Eメール</label>
-  <input type="email" name="email" value="{{ $user->email }}">
+  @if ($errors->any())
+  <ul class="account-edit-errors">
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
+  </ul>
+  @endif
 
-  <label>名前</label>
-  <input type="text" name="name_kanji" value="{{ $user->name_kanji }}">
+  <form action="/mypage/edit" method="POST" class="account-edit-form">
+    @csrf
+    @method('PUT')
 
-  <label>カナ</label>
-  <input type="text" name="name_kana" value="{{ $user->name_kana }}">
+    <div class="account-edit-group">
+      <label for="name">ユーザ名</label>
+      <input type="text" id="name" name="name"
+        value="{{ old('name', $user->name) }}">
+    </div>
 
-  <button type="button" onclick="location.href='/mypage'">戻る</button>
-  <button type="submit">更新</button>
-</form>
+    <div class="account-edit-group">
+      <label for="email">Eメール</label>
+      <input type="email" id="email" name="email"
+        value="{{ old('email', $user->email) }}">
+    </div>
+
+    <div class="account-edit-group">
+      <label for="name_kanji">名前</label>
+      <input type="text" id="name_kanji" name="name_kanji"
+        value="{{ old('name_kanji', $user->name_kanji) }}">
+    </div>
+
+    <div class="account-edit-group">
+      <label for="name_kana">カナ</label>
+      <input type="text" id="name_kana" name="name_kana"
+        value="{{ old('name_kana', $user->name_kana) }}">
+    </div>
+
+    <div class="account-edit-actions">
+      <a href="/mypage" class="back-button">戻る</a>
+      <button type="submit" class="cart-button">更新</button>
+    </div>
+
+  </form>
+
+</div>
+
+@endsection

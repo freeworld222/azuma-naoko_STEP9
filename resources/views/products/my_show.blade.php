@@ -2,32 +2,57 @@
 
 @section('content')
 
-<h1>出品商品詳細</h1>
+<div class="my-product-detail-container">
 
-<p>商品名：{{ $product->product_name }}</p>
-<p>商品説明：{{ $product->description }}</p>
+  <h1>出品商品詳細</h1>
 
-<p>商品画像：</p>
-@if ($product->img_path)
-<img
-  src="{{ asset('storage/' . $product->img_path) }}"
-  alt="{{ $product->product_name }}"
-  width="100">
-@endif
+  <div class="my-product-detail-info">
 
-<p>金額：￥{{ $product->price }}</p>
+    <p>商品名：{{ $product->product_name }}</p>
 
-<a href="/my-products/{{ $product->id }}/edit"
-  class="btn btn-primary">編集</a>
+    <p>説明：{{ $product->description }}</p>
 
-<form action="/my-products/{{ $product->id }}" method="POST"
-  onsubmit="return confirm('この商品を削除してもよろしいですか？');">
-  @csrf
-  @method('DELETE')
+    <div class="my-product-image-area">
+      <p>画像：</p>
 
-  <button type="submit">削除する</button>
-</form>
+      @if ($product->img_path)
+      <img
+        src="{{ asset('storage/' . $product->img_path) }}"
+        alt="{{ $product->product_name }}"
+        class="my-product-image">
+      @endif
+    </div>
 
-<a href="/products" class="btn btn-secondary">戻る</a>
+    <p>金額：￥{{ $product->price }}</p>
+
+    <div class="my-product-detail-actions">
+
+      <a
+        href="/my-products/{{ $product->id }}/edit"
+        class="cart-button">
+        編集
+      </a>
+
+      <form
+        action="/my-products/{{ $product->id }}"
+        method="POST"
+        onsubmit="return confirm('この商品を削除してもよろしいですか？');">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit" class="delete-button">
+          削除する
+        </button>
+      </form>
+
+      <a href="/products" class="back-button">
+        戻る
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
 
 @endsection
